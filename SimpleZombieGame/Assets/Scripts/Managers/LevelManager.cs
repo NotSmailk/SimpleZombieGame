@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
 
         m_timer += Time.deltaTime;
 
-        m_timerText.text = $"{((int)m_timer / 60):D2}:{(int)Mathf.Round(m_timer % 60):D2}";
+        m_timerText.text = $"{((int)m_timer / 60):D2}:{(int)Mathf.Round((int)m_timer % 60):D2}";
     }
 
     public void ChangeHP()
