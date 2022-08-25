@@ -8,3 +8,4 @@ Used Assets:
 - Sci-fi Guns SFX Pack
 - Free Zombie Character Sounds
 - POLYGON Starter Pack - Low Poly 3D Art by Synty
+- POLYGON - Zombie Pack
