@@ -4,9 +4,9 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private float m_speed = 5f;
-    private float m_damage = 1f;
+    private int m_damage = 1;
 
-    public void Launch(Vector3 direction, float damage)
+    public void Launch(Vector3 direction, int damage)
     {
         GetComponent<Rigidbody>().velocity = direction * m_speed;
 

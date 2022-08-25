@@ -27,7 +27,7 @@ public class PlayerShoot : MonoBehaviour
 
         Bullet bullet = Instantiate(m_bullet, m_shootPoint.position, Quaternion.identity);
 
-        bullet.Launch(transform.forward, 1f);
+        bullet.Launch(transform.forward, 1);
 
         m_component.PlayerSoundEffects.OnGunFire.Invoke();
 

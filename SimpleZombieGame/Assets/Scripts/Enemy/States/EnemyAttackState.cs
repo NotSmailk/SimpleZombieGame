@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 public class EnemyAttackState : EnemyState
 {
-    private float m_damage = 1f;
+    private int m_damage = 1;
     private bool m_onCooldown = false;
 
     public override EnemyState RunCurrentState()

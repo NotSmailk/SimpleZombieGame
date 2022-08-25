@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    [field: SerializeField] private float m_hp = 1f;
+    [field: SerializeField] private int m_hp = 1;
 
-    public float HP { get => m_hp; }
+    public int HP { get => m_hp; }
 
     private PlayerComponents m_components;
 
@@ -13,7 +13,7 @@ public class PlayerStatus : MonoBehaviour
         m_components = GetComponent<PlayerComponents>();
     }
 
-    public void GetDamage(float damage)
+    public void GetDamage(int damage)
     {
         m_hp -= damage;
 
