@@ -101,7 +101,7 @@ public class LevelManager : MonoBehaviour
 
         m_losePanel.SetActive(true);
 
-        m_survivedTime.text = $"{((int)m_timer / 60):D2}:{(int)Mathf.Round(m_timer % 60):D2}"; ;
+        m_survivedTime.text = $"{((int)m_timer / 60):D2}:{(int)Mathf.Round((int)m_timer % 60):D2}"; ;
     }
 
     public void ReloadLevel()
