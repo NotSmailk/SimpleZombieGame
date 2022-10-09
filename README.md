@@ -1,7 +1,7 @@
 # SimpleZombieGame
  Zombie Shooter
  
- Models and Animations taken from Mixamo.
+ Models and Animations were taken from Mixamo.
 
 Used Assets:
 - Free Deadly Kombat
