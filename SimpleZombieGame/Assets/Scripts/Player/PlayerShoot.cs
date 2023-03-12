@@ -1,47 +1,48 @@
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class PlayerShoot : MonoBehaviour
+public class PlayerShoot
 {
-    [field: SerializeField] private Bullet m_bullet;
-    [field: SerializeField] Transform m_shootPoint;
+    private float _cooldown = 0.5f;
+    private float _damage;
+    private bool _isReloading;
+    private UnityEvent _onGunFire;
+    private Transform _shootPoint;
+    private Transform _transform;
+    private Bullet _bullet;
 
-    private float m_cooldown = 0.5f;
-    private bool m_isReloading;
-    private PlayerComponents m_component;
-
-    private void Awake()
+    public void Initialize(Transform transform, Transform shootPoint, Bullet bullet, float damage, UnityEvent onGunFire)
     {
-        m_component = GetComponent<PlayerComponents>();
+        _transform = transform;
+        _onGunFire = onGunFire;
+        _shootPoint = shootPoint;
+        _bullet = bullet;
+        _damage = damage;
     }
 
-    private void Update()
+    public void GameUpdate()
     {
         Shoot();
     }
 
     private void Shoot()
     {
-        if (m_isReloading)
+        if (_isReloading)
             return;
 
-        Bullet bullet = Instantiate(m_bullet, m_shootPoint.position, Quaternion.identity);
+        Bullet bullet = GameObject.Instantiate(_bullet, _shootPoint.position, Quaternion.identity);
+        bullet.Launch(_transform.forward, _damage);
+        _onGunFire.Invoke();
 
-        bullet.Launch(transform.forward, 1);
-
-        m_component.PlayerSoundEffects.OnGunFire.Invoke();
-
-        Reload(m_cooldown);
+        Reload(_cooldown);
     }
 
     private async void Reload(float cooldown)
     {
-        m_isReloading = true;
-
+        _isReloading = true;
         cooldown *= 1000;
-
         await Task.Delay((int)cooldown);
-
-        m_isReloading = false;
+        _isReloading = false;
     }
 }

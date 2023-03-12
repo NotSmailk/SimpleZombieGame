@@ -4,37 +4,29 @@ public class EnemyChaseState : EnemyState
 {
     public override EnemyState RunCurrentState()
     {
-        m_components.EnemyAnimator.PlayChase();
+        _stateMachine.OnChase.Invoke();
 
-        if (!m_components.EnemyStateManager.IsActive)
+        if (!_stateMachine.IsActive)
         {
-            m_components.Rigidbody.velocity = Vector3.zero;
-
-            return m_components.EnemyStateManager.IdleState;
+            _body.velocity = Vector3.zero;
+            return _stateMachine.IdleState;
         }
 
-        m_components.transform.LookAt(LevelManager.Player.transform);
+        _transform.LookAt(Game.Player.transform);
+        _body.velocity = _transform.forward * _speed;
 
-        m_components.Rigidbody.velocity = m_components.transform.forward * m_components.EnemyStatus.Speed;
-
-        Collider[] colliders = Physics.OverlapSphere(m_components.transform.position, 1f);
-
-        if (colliders.Length > 0)
+        if (Game.Player == null)
         {
-            foreach (Collider collider in colliders)
-            {
-                m_components.EnemyStateManager.IsAttack = collider.GetComponent<PlayerComponents>() != null;
-
-                if (m_components.EnemyStateManager.IsAttack)
-                    break;
-            }
+            _body.velocity = Vector3.zero;
+            return _stateMachine.IdleState;
         }
 
-        if (m_components.EnemyStateManager.IsAttack)
-        {
-            m_components.Rigidbody.velocity = Vector3.zero;
+        _stateMachine.IsAttack = Vector3.Distance(_transform.position, Game.Player.transform.position) <= 1f;
 
-            return m_components.EnemyStateManager.AttackState;
+        if (_stateMachine.IsAttack)
+        {
+            _body.velocity = Vector3.zero;
+            return _stateMachine.AttackState;
         }
 
         return this;

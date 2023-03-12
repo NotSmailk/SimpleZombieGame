@@ -1,30 +1,30 @@
 using UnityEngine;
 
-public class PlayerRotation : MonoBehaviour
+public class PlayerRotation
 {
-    [field: SerializeField] private float m_rotationSpeed = 5f;
+    [field: SerializeField] private float _rotationSpeed = 5f;
 
-    private PlayerComponents m_components;
+    private Transform _transform;
 
-    private void Awake()
+    public void Initialize(Transform transform)
     {
-        m_components = GetComponent<PlayerComponents>();
+        _transform = transform;
     }
 
-    private void Update()
+    public void GameUpdate()
     {
         RotatePlayer(GameInputs.LeftMoveValue, GameInputs.RightMoveValue);
     }
 
     public void RotatePlayer(int leftValue, int rightValue)
     {
-        Quaternion rotation = transform.rotation;
+        Quaternion rotation = _transform.rotation;
 
-        float yAngle = Mathf.Clamp(ClampRotationValue(rotation.eulerAngles.y) + 10f * m_rotationSpeed * (rightValue - leftValue) * Time.deltaTime, -90f, 90f);
+        float rotationDelta = ClampRotationValue(rotation.eulerAngles.y) + 10f * _rotationSpeed * (rightValue - leftValue) * Time.deltaTime;
+        float yAngle = Mathf.Clamp(rotationDelta, -90f, 90f);
 
         rotation = Quaternion.Euler(rotation.eulerAngles.x, yAngle, rotation.eulerAngles.z);
-
-        transform.rotation = rotation;
+        _transform.rotation = rotation;
     }
 
     private float ClampRotationValue(float value)

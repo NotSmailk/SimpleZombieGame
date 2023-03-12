@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f065d61eddc580743b5116e13590900b, type: 3}
+  m_Name: New Player Data
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 4983004743340915311, guid: 2158127ca4eee64498fb30b8d1ef65d2, type: 3}
+  Health: 3
+  Damage: 1
+  BulletPrefab: {fileID: -862405153830929333, guid: df155d5b438550a4c812a9f7b0e050c7, type: 3}
+  Sounds:
+    GunFireClips:
+    - {fileID: 8300000, guid: 92d35fe1c59bbd14eaee9e3d3b54cea7, type: 3}
+    - {fileID: 8300000, guid: 5207b2a445fcb144281ab5395fe95c1d, type: 3}
+    - {fileID: 8300000, guid: 1e940d15337ad1e43b0cc1b2430d7c06, type: 3}
+    - {fileID: 8300000, guid: 70c97e425596b8142b7b9163256c0868, type: 3}
+    HitClip: {fileID: 8300000, guid: 1f53a5fc6bd934e46a5d8cfa8fd27b64, type: 3}
