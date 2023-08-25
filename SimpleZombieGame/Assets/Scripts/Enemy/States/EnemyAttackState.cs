@@ -1,33 +1,45 @@
 using UnityEngine;
-using System.Threading.Tasks;
 
-public class EnemyAttackState : EnemyState
+public class EnemyAttackState : IEnemyState, IEnterable
 {
     private bool _onCooldown = false;
+    protected Transform _transform;
+    protected Rigidbody _body;
+    protected float _speed;
 
-    public override EnemyState RunCurrentState()
+    public EnemyStateMachine Initializer { get; }
+
+    public EnemyAttackState(EnemyStateMachine stateMachine, Rigidbody body, Transform transform, float speed)
     {
-        if (Game.Player == null)
-            return _stateMachine.IdleState;
+        Initializer = stateMachine;
+        _body = body;
+        _transform = transform;
+        _speed = speed;
+    }
 
-        _stateMachine.OnAttack.Invoke();
-        _stateMachine.IsAttack = Vector3.Distance(_transform.position, Game.Player.transform.position) <= 1f;
+    public void Run()
+    {
+        bool isAttack = Game.Player != null && Vector3.Distance(_transform.position, Game.Player.transform.position) <= 1f;
 
-        if (_stateMachine.IsAttack)
+        if (!isAttack)
         {
-            Attack();
-
-            return this;
+            Initializer.SwitchState<EnemyIdleState>();
+            return;
         }
 
-        return _stateMachine.IsActive ? _stateMachine.ChaseState : _stateMachine.IdleState;
+        Attack();
     }
 
     private void Attack()
     {
-        if (_onCooldown || Game.Player == null)
+        if (_onCooldown)
             return;
 
-        _stateMachine.OnAttack.Invoke();
+        Initializer.OnAttack?.Invoke();
+    }
+
+    public void Enter()
+    {
+        _body.velocity = Vector3.zero;
     }
 }

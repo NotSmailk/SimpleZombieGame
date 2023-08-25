@@ -1,6 +1,4 @@
-using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class GameInputs : MonoBehaviour
 {

@@ -1,11 +1,28 @@
 using UnityEngine;
 
-public class EnemyIdleState : EnemyState
+public class EnemyIdleState : IEnemyState, IEnterable
 {
-    public override EnemyState RunCurrentState()
+    protected Rigidbody _body;
+
+    public EnemyStateMachine Initializer { get; }
+
+    public EnemyIdleState(EnemyStateMachine stateMachine, Rigidbody body)
     {
-        _stateMachine.OnIdle.Invoke();
+        Initializer = stateMachine;
+        _body = body;
+    }
+
+    public void Run()
+    {
+        if (Game.Player != null)
+        {
+            Initializer.SwitchState<EnemyChaseState>();
+        }    
+    }
+
+    public void Enter()
+    {
+        Initializer.OnIdle?.Invoke();
         _body.velocity = Vector3.zero;
-        return _stateMachine.IsActive ? _stateMachine.ChaseState : this;
     }
 }

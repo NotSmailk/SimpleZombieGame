@@ -1,22 +1,17 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class EnemyStateMachine
 {
-    private EnemyState _currentState;
-    private EnemyState _idleState;
-    private EnemyState _chaseState;
-    private EnemyState _attackState;
+    private IEnemyState _curState;
+    private Dictionary<Type, IEnemyState> _states = new Dictionary<Type, IEnemyState>();
 
     public UnityEvent OnIdle { get; private set; }
     public UnityEvent OnChase { get; private set; }
     public UnityEvent OnAttack { get; private set; }
     public UnityEvent OnDeath { get; private set; }
-    public bool IsActive { get; set; }
-    public bool IsAttack { get; set; }
-    public EnemyState IdleState { get => _idleState; }
-    public EnemyState ChaseState { get => _chaseState; }
-    public EnemyState AttackState { get => _attackState; }
 
     public void Initialize(UnityEvent onIdle, UnityEvent onAttack, UnityEvent onChase, UnityEvent onDeath, Transform transform, Rigidbody body, float speed)
     {
@@ -25,36 +20,30 @@ public class EnemyStateMachine
         OnIdle = onIdle;
         OnDeath = onDeath;
 
-        _attackState = new EnemyAttackState();
-        _idleState = new EnemyIdleState();
-        _chaseState = new EnemyChaseState();
+        var attackState = new EnemyAttackState(this, body, transform, speed);
+        var idleState = new EnemyIdleState(this, body);
+        var chaseState = new EnemyChaseState(this, body, transform, speed);
 
-        _idleState.Initialize(this, body, transform, speed);
-        _chaseState.Initialize(this, body, transform, speed);
-        _attackState.Initialize(this, body, transform, speed);
+        _states.Add(attackState.GetType(), attackState);
+        _states.Add(idleState.GetType(), idleState);
+        _states.Add(chaseState.GetType(), chaseState);
 
-        _currentState = _idleState;
+        _curState = idleState;
     }
 
     public void GameUpdate()
     {
-        RunStateMachine();
+        _curState.Run();
     }
 
-    private void RunStateMachine()
+    public void SwitchState<TEnemyState>() where TEnemyState : IEnemyState
     {
-        IsActive = Game.Player != null;
+        // Try get new state
+        if (_states.TryGetValue(typeof(TEnemyState), out IEnemyState state))
+            _curState = (TEnemyState)state;
 
-        EnemyState nextState = _currentState?.RunCurrentState();
-
-        if (nextState == null)
-            return;
-
-        SwitchToNextState(nextState);
-    }
-
-    private void SwitchToNextState(EnemyState nextState)
-    {
-        _currentState = nextState;
+        // Try enter new state
+        if (_curState is IEnterable enterable)
+            enterable.Enter();
     }
 }
